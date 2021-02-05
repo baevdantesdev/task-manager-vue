@@ -8,6 +8,20 @@ class Rest {
   getTaskById(id) {
     return axios.get("/tasks/" + id);
   }
+
+  deleteTask(id) {
+    return axios.delete("/tasks/" + id);
+  }
+
+  updateTask(task) {
+    return axios.patch(`/tasks/${task.id}`, task);
+  }
+
+  addTask(task) {
+    return axios.post("/tasks/", {
+      ...task
+    });
+  }
 }
 
 const rest = new Rest();

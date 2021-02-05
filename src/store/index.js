@@ -27,6 +27,15 @@ const store = new Vuex.Store({
       return rest.getTaskById(id).then(res => {
         commit("setTask", res.data);
       });
+    },
+    deleteTask: ({}, id) => {
+      return rest.deleteTask(id);
+    },
+    updateTask: ({}, task) => {
+      return rest.updateTask(task);
+    },
+    addTask: ({}, task) => {
+      return rest.addTask(task);
     }
   }
 });

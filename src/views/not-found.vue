@@ -1,6 +1,7 @@
 <template lang="pug">
   div.not-found
     h1 404
+    p Not Found
 </template>
 
 <script>

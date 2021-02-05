@@ -14,12 +14,14 @@
           button.button(v-if="isNewTask") Add
           div.flex(v-else)
             button.button.mr-2 Save
-            button.button Delete
+            button.button(@click.prevent="deleteTask") Delete
 </template>
 
 <script>
 import { mapState } from "vuex";
 import { statuses } from "@/statuses";
+import moment from "moment";
+import store from "@/store";
 
 export default {
   name: "task",
@@ -30,14 +32,53 @@ export default {
       form: {
         title: null,
         description: null,
-        created_date: new Date().toDateString(),
+        id: null,
+        created_date: moment(new Date()).format("YYYY-MM-DD"),
         status: statuses.find(status => status.id === 1)
       }
     };
   },
   methods: {
+    setForm() {
+      this.form = {
+        ...this.task,
+        created_date: moment(new Date(this.task.created_date)).format(
+          "YYYY-MM-DD"
+        ),
+        status: statuses.find(status => status.id === this.task.status)
+      };
+    },
     submit() {
-      //
+      if (this.isNewTask) {
+        this.addTask();
+      } else {
+        store.dispatch("updateTask", {
+          ...this.form,
+          status: this.getStatusForServer(),
+          created_date: moment(new Date(this.form.created_date)).format(
+            "YYYY-MM-DD"
+          )
+        });
+      }
+    },
+    getStatusForServer() {
+      return statuses.find(status => status.id === this.form.status.id).id;
+    },
+    addTask() {
+      store
+        .dispatch("addTask", {
+          ...this.form,
+          status: this.getStatusForServer()
+        })
+        .then(res => {
+          this.isNewTask = false;
+          this.$router.push("/tasks/" + res.data.id);
+        });
+    },
+    deleteTask() {
+      store.dispatch("deleteTask", this.task.id).then(() => {
+        this.$router.push("/");
+      });
     }
   },
   mounted() {
@@ -45,11 +86,7 @@ export default {
       this.isNewTask = false;
     }
     if (this.task && !this.isNewTask) {
-      this.form = {
-        ...this.task,
-        created_date: this.task.created_date,
-        status: statuses.find(status => status.id === this.task.status)
-      };
+      this.setForm();
     }
   },
   computed: mapState({

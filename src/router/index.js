@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "@/store";
@@ -28,8 +29,12 @@ const router = new VueRouter({
       name: "Task",
       component: () => import("@/views/task.vue"),
       beforeEnter: (to, from, next) => {
-        store.dispatch("getTaskById", to.params.id).then(() => {
-          next();
+        store
+          .dispatch("getTaskById", to.params.id)
+          .then(() => {
+            next();
+          }).catch(() => {
+          next("*");
         });
       }
     },

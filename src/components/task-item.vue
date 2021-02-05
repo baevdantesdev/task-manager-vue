@@ -23,6 +23,7 @@ export default {
 <style lang="sass" scoped>
 .task-item
   padding: 20px
+  margin-bottom: 20px
 
 .task-item__title
   font-size: 20px
