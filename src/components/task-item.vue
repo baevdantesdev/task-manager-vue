@@ -1,5 +1,7 @@
 <template lang="pug">
-  div.task-item(:style="{'background-color': getStatusColor(task)}" :title="task.title")
+  div.task-item(:style="{'background-color': getStatusColor(task)}"
+    :title="task.title",
+    v-on:dblclick="$emit('goToTask', task.id)")
     div.task-item__title {{ task.title }}
     div.task-item__description {{ task.description }}
 </template>

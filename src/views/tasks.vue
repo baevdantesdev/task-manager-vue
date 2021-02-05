@@ -4,7 +4,7 @@
     button.button(v-on:click="addTask") Add task
     div.row
       div.col-12.col-md-4(v-for="(task, index) in tasks", :key="index")
-        task-item(:task="task")
+        task-item(:task="task" @goToTask="goToTask($event)")
 </template>
 
 <script>
@@ -19,7 +19,10 @@ export default {
   }),
   methods: {
     addTask() {
-      this.$router.push("/tasks/new");
+      this.$router.push("tasks/new");
+    },
+    goToTask(id) {
+      this.$router.push("/tasks/" + id);
     }
   }
 };

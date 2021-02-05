@@ -19,6 +19,11 @@ const router = new VueRouter({
       component: () => import("@/views/tasks.vue")
     },
     {
+      path: "/tasks/new",
+      name: "Add task",
+      component: () => import("@/views/task.vue")
+    },
+    {
       path: "/tasks/:id",
       name: "Task",
       component: () => import("@/views/task.vue"),
@@ -27,11 +32,6 @@ const router = new VueRouter({
           next();
         });
       }
-    },
-    {
-      path: "/tasks/new",
-      name: "Add task",
-      component: () => import("@/views/task.vue")
     },
     {
       path: "*",

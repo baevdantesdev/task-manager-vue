@@ -1,14 +1,20 @@
 <template lang="pug">
   div.task
-    h1 {{ task.title }}
+    h1(v-if="!isNewTask") {{ task.title }}
+    h1(v-else) Add task
     div.row
       div.col-12.col-lg-5
-        form.task__form
-          input.task__field(v-model="form.title", placeholder="Title")
-          textarea.task__field.task__field-textarea(rows="4", v-model="form.description", placeholder="Description")
-          select.task__field(v-model="form.status")
+        form.task__form(@submit.prevent="submit")
+          input.task__field(v-model="form.title", placeholder="Title", required)
+          textarea.task__field.task__field-textarea(rows="4", v-model="form.description", required,
+            placeholder="Description")
+          select.task__field(v-model="form.status", v-if="!isNewTask")
             option(v-for="(status, index) in statuses", :key="index", :value="status") {{ status.title }}
-          input.task__field(v-model="form.created_date", type="date")
+          input.task__field(v-model="form.created_date", required, v-if="!isNewTask", type="date")
+          button.button(v-if="isNewTask") Add
+          div.flex(v-else)
+            button.button.mr-2 Save
+            button.button Delete
 </template>
 
 <script>
@@ -20,6 +26,7 @@ export default {
   data: () => {
     return {
       statuses,
+      isNewTask: true,
       form: {
         title: null,
         description: null,
@@ -28,8 +35,16 @@ export default {
       }
     };
   },
+  methods: {
+    submit() {
+      //
+    }
+  },
   mounted() {
-    if (this.task) {
+    if (this.$route.params.id) {
+      this.isNewTask = false;
+    }
+    if (this.task && !this.isNewTask) {
       this.form = {
         ...this.task,
         created_date: this.task.created_date,
