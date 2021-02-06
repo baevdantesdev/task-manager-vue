@@ -1,20 +1,21 @@
 <template lang="pug">
-  div.task
-    h1(v-if="!isNewTask") {{ task.title }}
-    h1(v-else) Add task
+  div.task(v-if="task")
+    h1 {{ task.title }}
     div.row
       div.col-12.col-lg-5
         form.task__form(@submit.prevent="submit")
           input.task__field(v-model="form.title", placeholder="Title", required)
           textarea.task__field.task__field-textarea(rows="4", v-model="form.description", required,
             placeholder="Description")
-          select.task__field(v-model="form.status", v-if="!isNewTask")
+          select.task__field(v-model="form.status")
             option(v-for="(status, index) in statuses", :key="index", :value="status") {{ status.title }}
-          input.task__field(v-model="form.created_date", required, v-if="!isNewTask", type="date")
-          button.button(v-if="isNewTask") Add
-          div.flex(v-else)
+          input.task__field(v-model="form.created_date", required, type="date")
+          div.flex
             button.button.mr-2 Save
             button.button(@click.prevent="deleteTask") Delete
+  div(v-else).text-center
+    h1 404
+    p Not found task
 </template>
 
 <script>
@@ -22,13 +23,14 @@ import { mapState } from "vuex";
 import { statuses } from "@/statuses";
 import moment from "moment";
 import store from "@/store";
+import { getStatusForRequest } from "@/utils";
 
 export default {
   name: "task",
   data: () => {
     return {
       statuses,
-      isNewTask: true,
+      isErrorTaskResponse: false,
       form: {
         title: null,
         description: null,
@@ -37,6 +39,16 @@ export default {
         status: statuses.find(status => status.id === 1)
       }
     };
+  },
+  beforeRouteEnter(to, from, next) {
+    store
+      .dispatch("getTaskById", to.params.id)
+      .then(() => {
+        next();
+      })
+      .catch(() => {
+        next();
+      });
   },
   methods: {
     setForm() {
@@ -49,29 +61,22 @@ export default {
       };
     },
     submit() {
-      if (this.isNewTask) {
-        this.addTask();
-      } else {
-        store.dispatch("updateTask", {
-          ...this.form,
-          status: this.getStatusForServer(),
-          created_date: moment(new Date(this.form.created_date)).format(
-            "YYYY-MM-DD"
-          )
-        });
-      }
-    },
-    getStatusForServer() {
-      return statuses.find(status => status.id === this.form.status.id).id;
+      store.dispatch("updateTask", {
+        ...this.form,
+        status: getStatusForRequest(this.form.status.id),
+        created_date: moment(new Date(this.form.created_date)).format(
+          "YYYY-MM-DD"
+        )
+      });
     },
     addTask() {
       store
         .dispatch("addTask", {
           ...this.form,
-          status: this.getStatusForServer()
+          status: getStatusForRequest(this.form.status.id)
         })
         .then(res => {
-          this.isNewTask = false;
+          this.form.id = res.data.id;
           this.$router.push("/tasks/" + res.data.id);
         });
     },
@@ -82,10 +87,7 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.params.id) {
-      this.isNewTask = false;
-    }
-    if (this.task && !this.isNewTask) {
+    if (this.task) {
       this.setForm();
     }
   },
@@ -94,20 +96,3 @@ export default {
   })
 };
 </script>
-
-<style lang="sass" scoped>
-.task__form
-  width: 100%
-
-.task__field
-  width: 100%
-  display: block
-  height: 40px
-
-.task__field-textarea
-  resize: none
-  height: auto
-
-.task__field:not(:last-child)
-  margin-bottom: 15px
-</style>

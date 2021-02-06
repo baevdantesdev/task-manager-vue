@@ -7,7 +7,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     tasks: [],
-    currentTask: null
+    currentTask: null,
+    isLoading: false
   },
   mutations: {
     setTasks: (state, payload) => {
@@ -15,17 +16,24 @@ const store = new Vuex.Store({
     },
     setTask: (state, payload) => {
       state.currentTask = payload;
+    },
+    setLoading: (state, flag) => {
+      state.isLoading = flag;
     }
   },
   actions: {
     getTasks: ({ commit }) => {
+      commit("setLoading", true);
       return rest.getTasks().then(res => {
         commit("setTasks", res.data);
+        commit("setLoading", false);
       });
     },
     getTaskById: ({ commit }, id) => {
+      commit("setLoading", true);
       return rest.getTaskById(id).then(res => {
         commit("setTask", res.data);
+        commit("setLoading", false);
       });
     },
     deleteTask: ({}, id) => {

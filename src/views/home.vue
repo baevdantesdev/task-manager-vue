@@ -11,13 +11,19 @@
 <script>
 import { mapState } from "vuex";
 import TaskItem from "@/components/task-item";
+import store from "@/store";
 
 export default {
-  name: "tasks",
+  name: "home",
   components: { TaskItem },
   computed: mapState({
     tasks: state => state.tasks
   }),
+  beforeRouteEnter: (to, from, next) => {
+    store.dispatch("getTasks").then(() => {
+      next();
+    });
+  },
   methods: {
     addTask() {
       this.$router.push("tasks/new");

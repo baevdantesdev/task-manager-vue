@@ -1,7 +1,5 @@
-/* eslint-disable prettier/prettier */
 import Vue from "vue";
 import VueRouter from "vue-router";
-import store from "@/store";
 
 Vue.use(VueRouter);
 
@@ -11,32 +9,18 @@ const router = new VueRouter({
   routes: [
     {
       path: "/",
-      name: "Tasks",
-      beforeEnter: (to, from, next) => {
-        store.dispatch("getTasks").then(() => {
-          next();
-        });
-      },
-      component: () => import("@/views/tasks.vue")
+      name: "Home",
+      component: () => import("@/views/home.vue")
     },
     {
       path: "/tasks/new",
       name: "Add task",
-      component: () => import("@/views/task.vue")
+      component: () => import("@/views/new-task.vue")
     },
     {
       path: "/tasks/:id",
       name: "Task",
-      component: () => import("@/views/task.vue"),
-      beforeEnter: (to, from, next) => {
-        store
-          .dispatch("getTaskById", to.params.id)
-          .then(() => {
-            next();
-          }).catch(() => {
-          next("*");
-        });
-      }
+      component: () => import("@/views/task.vue")
     },
     {
       path: "*",
