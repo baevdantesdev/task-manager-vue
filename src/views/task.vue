@@ -96,11 +96,6 @@ export default {
     }
   },
   mounted() {
-    // window.onpopstate = event => {
-    //   store.commit("setLoading", true);
-    //   event.preventDefault();
-    //   this.$router.push("/");
-    // };
     if (this.task) {
       this.setForm();
     }
