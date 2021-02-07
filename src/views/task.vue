@@ -31,6 +31,7 @@ export default {
     return {
       statuses,
       prevRoute: null,
+      isDeleting: false,
       isErrorTaskResponse: false,
       form: {
         title: null,
@@ -43,7 +44,7 @@ export default {
   },
   beforeDestroy() {
     store.commit("clearCurrentTask");
-    if (this.prevRoute.fullPath === "/tasks/new") {
+    if (this.prevRoute.fullPath === "/tasks/new" && !this.isDeleting) {
       this.$router.push("/");
     }
   },
@@ -91,6 +92,7 @@ export default {
     },
     deleteTask() {
       store.dispatch("deleteTask", this.task.id).then(() => {
+        this.isDeleting = true;
         this.$router.push("/");
       });
     }
