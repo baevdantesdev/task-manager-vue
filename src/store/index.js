@@ -27,10 +27,14 @@ const store = new Vuex.Store({
   actions: {
     getTasks: ({ commit }) => {
       commit("setLoading", true);
-      return rest.getTasks().then(res => {
-        commit("setTasks", res.data);
-        commit("setLoading", false);
-      });
+      return rest
+        .getTasks()
+        .then(res => {
+          commit("setTasks", res.data);
+        })
+        .finally(() => {
+          commit("setLoading", false);
+        });
     },
     getTaskById: ({ commit }, id) => {
       commit("setLoading", true);

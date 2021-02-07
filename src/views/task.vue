@@ -30,6 +30,7 @@ export default {
   data: () => {
     return {
       statuses,
+      prevRoute: null,
       isErrorTaskResponse: false,
       form: {
         title: null,
@@ -42,12 +43,17 @@ export default {
   },
   beforeDestroy() {
     store.commit("clearCurrentTask");
+    if (this.prevRoute.fullPath === "/tasks/new") {
+      this.$router.push("/");
+    }
   },
   beforeRouteEnter(to, from, next) {
     store
       .dispatch("getTaskById", to.params.id)
       .then(() => {
-        next();
+        next(vm => {
+          vm.prevRoute = from;
+        });
       })
       .catch(() => {
         next();
@@ -90,11 +96,11 @@ export default {
     }
   },
   mounted() {
-    window.onpopstate = event => {
-      store.commit("setLoading", true);
-      event.preventDefault();
-      this.$router.push("/");
-    };
+    // window.onpopstate = event => {
+    //   store.commit("setLoading", true);
+    //   event.preventDefault();
+    //   this.$router.push("/");
+    // };
     if (this.task) {
       this.setForm();
     }
