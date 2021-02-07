@@ -23,7 +23,10 @@ export default {
   min-height: 100vh
 .task__form
   width: 100%
-
+.task__title
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
 .task__field
   width: 100%
   display: block

@@ -1,6 +1,6 @@
 <template lang="pug">
   div.task(v-if="task")
-    h1 {{ task.title }}
+    h1.task__title {{ task.title }}
     div.row
       div.col-12.col-lg-5
         form.task__form(@submit.prevent="submit")
