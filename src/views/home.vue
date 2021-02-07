@@ -16,9 +16,7 @@ import store from "@/store";
 export default {
   name: "home",
   components: { TaskItem },
-  computed: mapState({
-    tasks: state => state.tasks
-  }),
+  computed: mapState(["tasks"]),
   beforeRouteEnter: (to, from, next) => {
     store.dispatch("getTasks").then(() => {
       next();

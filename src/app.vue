@@ -12,9 +12,7 @@ import { mapState } from "vuex";
 export default {
   name: "app",
   components: { preloader },
-  computed: mapState({
-    isLoading: state => state.isLoading
-  })
+  computed: mapState(["isLoading"])
 };
 </script>
 

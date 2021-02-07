@@ -8,20 +8,6 @@
       "status": 3
     },
     {
-      "title": "aaa",
-      "description": "ddd",
-      "id": 13,
-      "created_date": "2021-02-07",
-      "status": 1
-    },
-    {
-      "title": "aaa",
-      "description": "ddd2",
-      "id": 15,
-      "created_date": "2021-02-07",
-      "status": 1
-    },
-    {
       "title": "a",
       "description": "a",
       "id": 16,
@@ -43,18 +29,11 @@
       "status": 1
     },
     {
-      "title": "aa",
-      "description": "aa",
-      "id": 19,
-      "created_date": "2021-02-07",
-      "status": 1
-    },
-    {
       "title": "a",
       "description": "a",
       "id": 20,
       "created_date": "2021-02-07",
-      "status": 1
+      "status": 2
     },
     {
       "title": "aaa",

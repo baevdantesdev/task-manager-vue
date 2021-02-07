@@ -101,7 +101,7 @@ export default {
     }
   },
   computed: mapState({
-    task: state => state.currentTask
+    task: "currentTask"
   })
 };
 </script>
