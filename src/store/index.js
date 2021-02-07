@@ -31,10 +31,15 @@ const store = new Vuex.Store({
     },
     getTaskById: ({ commit }, id) => {
       commit("setLoading", true);
-      return rest.getTaskById(id).then(res => {
-        commit("setTask", res.data);
-        commit("setLoading", false);
-      });
+      return rest
+        .getTaskById(id)
+        .then(res => {
+          commit("setTask", res.data);
+          commit("setLoading", false);
+        })
+        .finally(() => {
+          commit("setLoading", false);
+        });
     },
     deleteTask: ({}, id) => {
       return rest.deleteTask(id);
@@ -42,8 +47,11 @@ const store = new Vuex.Store({
     updateTask: ({}, task) => {
       return rest.updateTask(task);
     },
-    addTask: ({}, task) => {
-      return rest.addTask(task);
+    addTask: ({ commit }, task) => {
+      commit("setLoading", true);
+      return rest.addTask(task).finally(() => {
+        commit("setLoading", false);
+      });
     }
   }
 });
