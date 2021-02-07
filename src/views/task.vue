@@ -40,6 +40,9 @@ export default {
       }
     };
   },
+  beforeDestroy() {
+    store.commit("clearCurrentTask");
+  },
   beforeRouteEnter(to, from, next) {
     store
       .dispatch("getTaskById", to.params.id)
@@ -87,6 +90,11 @@ export default {
     }
   },
   mounted() {
+    window.onpopstate = event => {
+      store.commit("setLoading", true);
+      event.preventDefault();
+      this.$router.push("/");
+    };
     if (this.task) {
       this.setForm();
     }

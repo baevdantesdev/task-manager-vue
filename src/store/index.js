@@ -17,6 +17,9 @@ const store = new Vuex.Store({
     setTask: (state, payload) => {
       state.currentTask = payload;
     },
+    clearCurrentTask: state => {
+      state.currentTask = null;
+    },
     setLoading: (state, flag) => {
       state.isLoading = flag;
     }

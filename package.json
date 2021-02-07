@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "serve-server": "concurrently \"npm run serve\" \"json-server --watch db.json\"",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
@@ -12,6 +13,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "bootstrap-4-grid": "^3.4.0",
+    "concurrently": "^5.3.0",
     "core-js": "^3.6.5",
     "json-server": "^0.16.3",
     "moment": "^2.29.1",
