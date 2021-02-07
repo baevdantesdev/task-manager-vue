@@ -23,7 +23,7 @@ export default {
 <style lang="sass" scoped>
 .task-item
   padding: 20px
-  margin-bottom: 20px
+  height: 100%
 
 .task-item__title
   font-size: 20px
@@ -34,6 +34,8 @@ export default {
   white-space: nowrap
 
 .task-item__description
-  -webkit-line-clamp: 3
+  display: -webkit-box
+  -webkit-line-clamp: 2
+  -webkit-box-orient: vertical
   overflow: hidden
 </style>

@@ -5,7 +5,7 @@
       div.col-12.col-lg-5
         form.task__form(@submit.prevent="addTask", ref="form")
           input.task__field(v-model="form.title", placeholder="Title", required)
-          textarea.task__field.task__field-textarea(rows="4", v-model="form.description", required,
+          textarea.task__field.task__field-textarea(rows="8", v-model="form.description", required,
             placeholder="Description")
           button.button(type="submit") Add
 </template>

@@ -4,7 +4,7 @@
     button.button(v-on:click="addTask") Add task
     p(v-if="!tasks.length") No tasks
     div.row
-      div.col-12.col-md-4(v-for="(task, index) in tasks", :key="index")
+      div.col-12.col-md-4.mb-4(v-for="(task, index) in tasks", :key="index")
         task-item(:task="task" @goToTask="goToTask($event)")
 </template>
 

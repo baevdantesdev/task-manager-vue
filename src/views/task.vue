@@ -5,7 +5,7 @@
       div.col-12.col-lg-5
         form.task__form(@submit.prevent="submit")
           input.task__field(v-model="form.title", placeholder="Title", required)
-          textarea.task__field.task__field-textarea(rows="4", v-model="form.description", required,
+          textarea.task__field.task__field-textarea(rows="8", v-model="form.description", required,
             placeholder="Description")
           select.task__field(v-model="form.status")
             option(v-for="(status, index) in statuses", :key="index", :value="status") {{ status.title }}
