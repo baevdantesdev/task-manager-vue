@@ -4,15 +4,16 @@
     div.row
       div.col-12.col-lg-5
         form.task__form(@submit.prevent="submit")
-          input.task__field(v-model="form.title", placeholder="Title", required)
-          textarea.task__field.task__field-textarea(rows="8", v-model="form.description", required,
+          input.task__field(v-model="form.title", :disabled="isLoading" placeholder="Title", required)
+          textarea.task__field.task__field-textarea(rows="8", :disabled="isLoading",
+            v-model="form.description", required,
             placeholder="Description")
-          select.task__field(v-model="form.status")
+          select.task__field(v-model="form.status", :disabled="isLoading")
             option(v-for="(status, index) in statuses", :key="index", :value="status") {{ status.title }}
-          input.task__field(v-model="form.created_date", required, type="date")
+          input.task__field(v-model="form.created_date", required, :disabled="isLoading", type="date")
           div.flex
-            button.button.mr-2 Save
-            button.button(@click.prevent="deleteTask") Delete
+            button.button.mr-2(:disabled="isLoading") Save
+            button.button(@click.prevent="deleteTask", :disabled="isLoading") Delete
   div(v-else).text-center
     h1 404
     p Not found task
@@ -33,6 +34,7 @@ export default {
       prevRoute: null,
       isDeleting: false,
       isErrorTaskResponse: false,
+      isLoading: false,
       form: {
         title: null,
         description: null,
@@ -52,8 +54,8 @@ export default {
     store
       .dispatch("getTaskById", to.params.id)
       .then(() => {
-        next(vm => {
-          vm.prevRoute = from;
+        next(to => {
+          to.prevRoute = from;
         });
       })
       .catch(() => {
@@ -71,27 +73,23 @@ export default {
       };
     },
     submit() {
-      store.dispatch("updateTask", {
-        ...this.form,
-        status: getStatusForRequest(this.form.status.id),
-        created_date: moment(new Date(this.form.created_date)).format(
-          "YYYY-MM-DD"
-        )
-      });
-    },
-    addTask() {
+      this.isLoading = true;
       store
-        .dispatch("addTask", {
+        .dispatch("updateTask", {
           ...this.form,
-          status: getStatusForRequest(this.form.status.id)
+          status: getStatusForRequest(this.form.status.id),
+          created_date: moment(new Date(this.form.created_date)).format(
+            "YYYY-MM-DD"
+          )
         })
-        .then(res => {
-          this.form.id = res.data.id;
-          this.$router.push("/tasks/" + res.data.id);
+        .then(() => {
+          this.isLoading = false;
         });
     },
     deleteTask() {
+      this.isLoading = true;
       store.dispatch("deleteTask", this.task.id).then(() => {
+        this.isLoading = false;
         this.isDeleting = true;
         this.$router.push("/");
       });

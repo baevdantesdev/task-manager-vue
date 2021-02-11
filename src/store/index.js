@@ -54,11 +54,8 @@ const store = new Vuex.Store({
     updateTask: ({}, task) => {
       return rest.updateTask(task);
     },
-    addTask: ({ commit }, task) => {
-      commit("setLoading", true);
-      return rest.addTask(task).finally(() => {
-        commit("setLoading", false);
-      });
+    addTask: ({}, task) => {
+      return rest.addTask(task);
     }
   }
 });

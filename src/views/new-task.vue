@@ -4,10 +4,10 @@
     div.row
       div.col-12.col-lg-5
         form.task__form(@submit.prevent="addTask", ref="form")
-          input.task__field(v-model="form.title", placeholder="Title", required)
-          textarea.task__field.task__field-textarea(rows="8", v-model="form.description", required,
+          input.task__field(v-model="form.title", :disabled="isLoading", placeholder="Title", required)
+          textarea.task__field.task__field-textarea(rows="8", :disabled="isLoading", v-model="form.description", required,
             placeholder="Description")
-          button.button(type="submit") Add
+          button.button(type="submit", :disabled="isLoading") Add
 </template>
 
 <script>
@@ -21,6 +21,7 @@ export default {
   data: () => {
     return {
       statuses,
+      isLoading: false,
       form: {
         title: null,
         description: null,
@@ -32,6 +33,7 @@ export default {
   },
   methods: {
     addTask() {
+      this.isLoading = true;
       store
         .dispatch("addTask", {
           ...this.form,
@@ -40,6 +42,7 @@ export default {
         .then(res => {
           this.form.id = res.data.id;
           this.$router.push("/tasks/" + res.data.id);
+          this.isLoading = false;
         });
     }
   }
